@@ -14,11 +14,16 @@ prepare:
 	@mkdir -p build/doc
 	@mkdir -p build/tar
 
+deps:
+	@echo "--> Getting dependecies"
+	@go get -v ./...
+	@go get -v github.com/stretchr/testify/mock
+
 format:
 	@echo "--> Formatting source code"
 	@go fmt ./...
 
-test: prepare format
+test: prepare deps format
 	@echo "--> Testing application"
 	@go test -v -outputdir build/test ./...
 
