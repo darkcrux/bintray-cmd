@@ -47,12 +47,17 @@ package: build-all
 	@tar cfz build/tar/${APP_NAME}-${VERSION}-darwin-amd64.tar.gz -C build/bin/darwin-amd64/${VERSION} ${APP_NAME}
 
 release: package
+ifeq ($(VERSION) , latest)
+	@echo "--> Removing Latest Version"
+	@curl -s -X DELETE -u ${ACCESS_KEY} https://api.bintray.com/packages/darkcrux/generic/${APP_NAME}/versions/${VERSION}
+endif
 	@echo "--> Releasing version: ${VERSION}"
-	@curl -T "build/tar/${APP_NAME}-${VERSION}-linux-386.tar.gz" -u "${ACCESS_KEY}" "https://api.bintray.com/content/darkcrux/generic/${APP_NAME}/${VERSION}/${APP_NAME}-${VERSION}-linux-386.tar.gz"
+	@curl -s -T "build/tar/${APP_NAME}-${VERSION}-linux-386.tar.gz" -u "${ACCESS_KEY}" "https://api.bintray.com/content/darkcrux/generic/${APP_NAME}/${VERSION}/${APP_NAME}-${VERSION}-linux-386.tar.gz"
 	@echo "... linux-386"
-	@curl -T "build/tar/${APP_NAME}-${VERSION}-linux-amd64.tar.gz" -u "${ACCESS_KEY}" "https://api.bintray.com/content/darkcrux/generic/${APP_NAME}/${VERSION}/${APP_NAME}-${VERSION}-linux-amd64.tar.gz"
+	@curl -s -T "build/tar/${APP_NAME}-${VERSION}-linux-amd64.tar.gz" -u "${ACCESS_KEY}" "https://api.bintray.com/content/darkcrux/generic/${APP_NAME}/${VERSION}/${APP_NAME}-${VERSION}-linux-amd64.tar.gz"
 	@echo "... linux-amd64"
-	@curl -T "build/tar/${APP_NAME}-${VERSION}-darwin-amd64.tar.gz" -u "${ACCESS_KEY}" "https://api.bintray.com/content/darkcrux/generic/${APP_NAME}/${VERSION}/${APP_NAME}-${VERSION}-darwin-386.tar.gz"
+	@curl -s -T "build/tar/${APP_NAME}-${VERSION}-darwin-amd64.tar.gz" -u "${ACCESS_KEY}" "https://api.bintray.com/content/darkcrux/generic/${APP_NAME}/${VERSION}/${APP_NAME}-${VERSION}-darwin-amd64.tar.gz"
 	@echo "... darwin-amd64"
 	@echo "--> Publishing version ${VERSION}"
-	@curl -X POST -u ${ACCESS_KEY} https://api.bintray.com/content/darkcrux/generic/${APP_NAME}/${VERSION}/publish
+	@curl -s -X POST -u ${ACCESS_KEY} https://api.bintray.com/content/darkcrux/generic/${APP_NAME}/${VERSION}/publish
+	@echo 
