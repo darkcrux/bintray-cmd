@@ -50,6 +50,7 @@ release: package
 ifeq ($(VERSION) , latest)
 	@echo "--> Removing Latest Version"
 	@curl -s -X DELETE -u ${ACCESS_KEY} https://api.bintray.com/packages/darkcrux/generic/${APP_NAME}/versions/${VERSION}
+	@echo
 endif
 	@echo "--> Releasing version: ${VERSION}"
 	@curl -s -T "build/tar/${APP_NAME}-${VERSION}-linux-386.tar.gz" -u "${ACCESS_KEY}" "https://api.bintray.com/content/darkcrux/generic/${APP_NAME}/${VERSION}/${APP_NAME}-${VERSION}-linux-386.tar.gz"
